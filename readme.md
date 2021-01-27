@@ -6,8 +6,7 @@ V. Liakoni *, A. Modirshanechi *, J. Brea, and W. Gerstner
 \* V.L. and A.M. made equal contribution to this article.
 
 Contact:
-[vasiliki.liakoni@epfl.ch](mailto:vasiliki.liakoni@epfl.ch), \
-[alireza.modirshanechi@epfl.ch](mailto:alireza.modirshanechi@epfl.ch)
+[vasiliki.liakoni@epfl.ch](mailto:vasiliki.liakoni@epfl.ch), [alireza.modirshanechi@epfl.ch](mailto:alireza.modirshanechi@epfl.ch)
 
 ## Installation
 
@@ -28,7 +27,7 @@ All (julia) packages and dependencies will be installed automatically within thi
 
 julia> using NonstationaryModelLearning
 
-To run the main simulations of the paper, type.
+To run the main simulations of the paper, type
 
 julia> NonstationaryModelLearning.runner_compare()
 
@@ -38,8 +37,8 @@ Parameters of the environments and of the learning algorithms can also be change
 
 Otherwise, a good place to start with the learning algorithms and the environments is the examples.jl file.
 
-The naming convention of the algorithms are same as used in the paper. \
-The Categorical task (section 2.3.2) is called "Multinomial" in the code.
+The naming convention of the algorithms are same as used in the paper, \
+apart from the Categorical task (section 2.3.2) which is called "Multinomial" in the code.
 
 ## Code
 
@@ -47,10 +46,12 @@ The Categorical task (section 2.3.2) is called "Multinomial" in the code.
 * multinomialtask: environment, learning algorithms and optimization functions for the Categorical estimation task (section 2.3.2)
 * processandplot: results processing and plotting utilities.
 * experiment: simulations for experimental predictions (section 2.4)
-* parameterDicts: dictionaries with the optimized parameter values for different environments. Please refer to src/readme.txt for more information.
+* parameterDicts: dictionaries with the optimized parameter values for different environments. \
+Please refer to src/readme.txt for more information.
 
 
 ## Data and Figures
 
-* doc/data_final: final results used for the paper's figures. There are some differences in naming conventions there, and we did not change them so that they are "as is" at publication time. Please refer to doc/data_final/readme.txt for more information.
+* doc/data_final: final results used for the paper's figures. \
+There are some differences in naming conventions there, and we did not change them so that results are "as is" at publication time. Please refer to doc/data_final/readme.txt for more information.
 * doc/figs: latex source code to reproduce the paper's figures.
