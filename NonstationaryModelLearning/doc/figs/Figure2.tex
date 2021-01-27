@@ -1,0 +1,202 @@
+\documentclass{standalone}
+\input{../tikzsetup.tex}
+\usepackage{multirow}
+\usetikzlibrary{calc}
+
+\usepackage{adjustbox}
+\newcommand{\approxs}[1]{\hat{#1}}
+\newcommand\MUone{0.36}
+\newcommand\MUtwo{-2.39}
+\newcommand\SIGMA{1}
+
+\begin{document}
+
+\begin{minipage}{20cm}
+\begin{tabular}{lll}
+    \textbf{A} & \textbf{B} \hspace{17mm} $\sigma = 0.1, p_c = 0.1$ &  \hspace{20mm} $\sigma = 5.0, p_c = 0.01$\\
+    \begin{tikzpicture}
+      \vspace{3pt}
+        \begin{axis}[
+            name=axtask,
+            width = .32\textwidth,
+            xmin = 550, xmax = 880,
+            xlabel = time,
+            ymin = -5, ymax = 5,
+            ylabel = observation,
+            ]
+            \addplot[only marks, mark size = .2pt] table [x = x, y = samples] {../data_final/taskexamples/task_gaussian_s1.0_Pc0.01.csv};
+            \addplot[ycomb, red, no marks, thick] table [x = x, y expr = \thisrow{switches} * 6] {../data_final/taskexamples/task_gaussian_s1.0_Pc0.01.csv};
+            \addplot[ycomb, red, no marks, thick] table [x = x, y expr = \thisrow{switches} * -6] {../data_final/taskexamples/task_gaussian_s1.0_Pc0.01.csv};
+            \addplot[blue!80!black, no marks] table [x = x, y = truemean] {../data_final/taskexamples/task_gaussian_s1.0_Pc0.01.csv};
+            \coordinate (axtask_muone) at (axis cs:600,-4.5);
+            \coordinate (axtask_mutwo) at (axis cs:670,-4.5);
+        \end{axis}
+        % ------ Axis for 1st distribution
+        \begin{axis}[
+            name=axtaskdistr1,
+            ytick=\empty,
+            width = .25\textwidth,
+            ymin = 0, ymax = 0.45,
+            xlabel = $y_t$,
+            ylabel = $P_{Y}(y_t | \mu_t)$,
+            axis lines=middle,
+            at={($(axtask.south west)+(-1.8cm,-5.5cm)$)}
+            ]
+            % density of Normal distribution:
+            \addplot[black, domain=-7*\SIGMA:7*\SIGMA, samples=201]
+                        {exp(-(x-\MUone)^2 / 2 / \SIGMA^2)
+                        / (\SIGMA * sqrt(2*pi))};
+            \coordinate (muone) at (\MUone, 0.) {};
+          \end{axis}
+          \node[mustyle] at (muone) {};
+          % ------ Axis for 2nd distribution
+          \begin{axis}[
+              name=axtaskdistr2,
+              ytick=\empty,
+              width = .25\textwidth,
+              ymin = 0, ymax = 0.45,
+              xlabel = $y_t$,
+              ylabel = $P_{Y}(y_t | \mu_t)$,
+              axis lines=middle,
+              at={($(axtask.south west)+(1.2cm,-4.5cm)$)}
+              ]
+              % density of Normal distribution:
+              \addplot[black, domain=-7*\SIGMA:7*\SIGMA, samples=201]
+                          {exp(-(x-\MUtwo)^2 / 2 / \SIGMA^2)
+                          / (\SIGMA * sqrt(2*pi))};
+              \coordinate (mutwo) at (\MUtwo, 0.) {};
+            \end{axis}
+            \node[mustyle] at (mutwo) {};
+            \draw [dashed] (axtask_muone) -- (axtaskdistr1.north);
+            \draw [dashed] (axtask_mutwo) -- (axtaskdistr2.north);
+        \end{tikzpicture}
+               &
+               \hspace{-13pt}
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/afterswitch/gaussian_s0.1_Pc0.1.csv}\data
+        % --------- Axis for main plot
+        \begin{axis}[
+            name=ax1,
+            width = .32\textwidth,
+            ymode = log,
+            grid = both,
+            ylabel = {average error},% \\ ($\textbf{MSE}[\approxs{\Theta}_{t} | R_{t} = n]$)},
+            xlabel = steps after change]
+            \plotwithquantiles{pf1}{\data}
+            \plotwithquantiles{gsor1}{\data}
+            \plotwithquantiles{gsorOriginal1}{\data}
+            \plotwithquantiles{smileextended}{\data}
+            \plotwithquantiles{gnassarJN}{\data}
+            \plotwithquantiles{leaky}{\data}
+            \plotwithquantiles{pf20}{\data}
+            \plotwithquantiles{gsor20}{\data}
+            \plotwithquantiles{gsorOriginal20}{\data}
+            \plotwithquantiles{smileOriginal}{\data}
+            \plotwithquantiles{gnassarNatN}{\data}
+            \plotwithquantiles{bayesfilter}{\data}
+            \coordinate (bottomleft_ax1) at (axis cs:0.9,0.005);
+            \coordinate (topleft_ax1) at (axis cs:0.9,0.02);
+            \coordinate (topright_ax1) at (axis cs:2.5,0.02);
+            \coordinate (bottomright_ax1) at (axis cs:2.5,0.005);
+            % draw a rectangle
+            \draw (bottomleft_ax1) rectangle (topright_ax1);
+        \end{axis}
+        % --------- Axis for zooming
+        \begin{axis}[
+              name=ax2,
+              width = .32\textwidth,
+              xmin=0.9,xmax=2.5,
+              ymin=0.005,ymax=0.02,
+              ymode = log,
+              grid = both,
+              xtick={1.,2.},
+              xlabel=steps after change,
+              ylabel=average error,
+              at={($(ax1.south west)+(0cm,-5cm)$)}
+              ]
+              \plotwithquantiles{pf1}{\data}
+              \plotwithquantiles{gsor1}{\data}
+              \plotwithquantiles{gsorOriginal1}{\data}
+              \plotwithquantiles{smileextended}{\data}
+              \plotwithquantiles{gnassarJN}{\data}
+              \plotwithquantiles{leaky}{\data}
+              \plotwithquantiles{pf20}{\data}
+              \plotwithquantiles{gsor20}{\data}
+              \plotwithquantiles{gsorOriginal20}{\data}
+              \plotwithquantiles{smileOriginal}{\data}
+              \plotwithquantiles{gnassarNatN}{\data}
+              \plotwithquantiles{bayesfilter}{\data}
+        \end{axis}
+        \draw [dashed] (bottomleft_ax1) -- (ax2.north west);
+        \draw [dashed] (bottomright_ax1) -- (ax2.north east);
+    \end{tikzpicture}
+        &
+        \hspace{-13pt}
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/afterswitch/gaussian_s5.0_Pc0.01.csv}\data
+        % --------- Axis for main plot
+        \begin{axis}[
+            name=ax3,
+            width = .32\textwidth,
+            ymode = log,
+            ylabel = average error,
+            xlabel = steps after change,
+            legend to name = gausslegend,
+            grid = both,
+            legend entries =
+            {,,,\pfone,,,,\mpone,,,,\mporiginalone,,,,\vsmile,,,,\nassarten,,,,\leaky,,,,\pftwenty,,,,\mptwenty,,,,\mporiginaltwenty,,,,\smileoriginal,,,,\nassartwelve,,,,\mpbayes},
+            legend columns = 6,
+            ]
+            \plotwithquantiles{pf1}{\data}
+            \plotwithquantiles{gsor1}{\data}
+            \plotwithquantiles{gsorOriginal1}{\data}
+            \plotwithquantiles{smileextended}{\data}
+            \plotwithquantiles{gnassarJN}{\data}
+            \plotwithquantiles{leaky}{\data}
+            \plotwithquantiles{pf20}{\data}
+            \plotwithquantiles{gsor20}{\data}
+            \plotwithquantiles{gsorOriginal20}{\data}
+            \plotwithquantiles{smileOriginal}{\data}
+            \plotwithquantiles{gnassarNatN}{\data}
+            \plotwithquantiles{bayesfilter}{\data}
+            \coordinate (bottomleft_ax3) at (axis cs:0.,0.8);
+            \coordinate (topleft_ax3) at (axis cs:0.,1.8);
+            \coordinate (topright_ax3) at (axis cs:20,1.8);
+            \coordinate (bottomright_ax3) at (axis cs:20,0.8);
+            % draw a rectangle
+            \draw (bottomleft_ax3) rectangle (topright_ax3);
+        \end{axis}
+        % --------- Axis for zooming
+        \begin{axis}[
+              name=ax4,
+              width = .32\textwidth,
+              xmin=0.,xmax=20,
+              ymin=0.8,ymax=1.8,
+              ymode = log,
+              grid = both,
+              xlabel=steps after change,
+              ylabel=average error,
+              at={($(ax3.south west)+(0cm,-5cm)$)}
+              ]
+              \plotwithquantiles{pf1}{\data}
+              \plotwithquantiles{gsor1}{\data}
+              \plotwithquantiles{gsorOriginal1}{\data}
+              \plotwithquantiles{smileextended}{\data}
+              \plotwithquantiles{gnassarJN}{\data}
+              \plotwithquantiles{leaky}{\data}
+              \plotwithquantiles{pf20}{\data}
+              \plotwithquantiles{gsor20}{\data}
+              \plotwithquantiles{gsorOriginal20}{\data}
+              \plotwithquantiles{smileOriginal}{\data}
+              \plotwithquantiles{gnassarNatN}{\data}
+              \plotwithquantiles{bayesfilter}{\data}
+        \end{axis}
+        \draw [dashed] (bottomleft_ax3) -- (ax4.north west);
+        \draw [dashed] (bottomright_ax3) -- (ax4.north east);
+    \end{tikzpicture}
+    \\
+        & \multicolumn{2}{c}{\ref{gausslegend}}
+\end{tabular}
+
+\end{minipage}
+\end{document}

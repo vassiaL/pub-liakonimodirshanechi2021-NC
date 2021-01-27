@@ -1,0 +1,97 @@
+\documentclass{standalone}
+\input{../tikzsetup.tex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{calc}
+
+\newcommand\xreference{0.4}
+\newcommand\xstart{-2*\xreference - 0.5}
+\newcommand\xstop{8*\xreference}
+
+\newcommand{\approxs}[1]{\hat{#1}}
+\newcommand\MUprior{0.}
+\newcommand\SIGMAprior{0.8}
+\newcommand\MUbeliefone{0.9}
+\newcommand\SIGMAbeliefone{0.2}
+
+\newcommand{\getY}[3]{exp(-(#1-#2)^2 / (2 * #3^2)) / (#3 * sqrt(2*pi))}
+
+\newcommand\MUbelieftwo{2.1}
+\newcommand\SIGMAbelieftwo{0.2}
+
+\begin{document}
+
+\begin{minipage}{19cm}
+\centering
+\begin{tabular}{l}
+  \textbf{A} \\
+    \hspace{30mm}
+    \begin{tikzpicture}
+      \begin{axis}[
+          name=axtaskdistr1,
+          ytick=\empty,
+          xtick=\empty,
+          width = .4\textwidth,
+          ymin = 0, ymax = 2.5,
+          xlabel = $y_{t+1}$,
+          axis lines=middle,
+          clip=false,
+          ]
+          % density of Normal distribution:
+          \addplot[black, thick, domain=\xstart:\xstop, samples=201]
+                      {exp(-(x-\MUprior)^2 / (2 *\SIGMAprior^2))
+                      / (\SIGMAprior * sqrt(2*pi))};
+          \addplot[red!60!black, thick, densely dotted, domain=\xstart:\xstop, samples=201]
+                      {exp(-(x-\MUbeliefone)^2 / (2 *\SIGMAbeliefone^2))
+                      / (\SIGMAbeliefone * sqrt(2*pi))};
+          \addplot[red!60!black, thick, densely dotted, domain=\xstart:\xstop, samples=201]
+                      {exp(-(x-\MUbelieftwo)^2 / (2 *\SIGMAbelieftwo^2))
+                      / (\SIGMAbelieftwo * sqrt(2*pi))};
+          \addplot[black, mark=*] coordinates {(\MUbeliefone - 0.36,\getY{\MUbeliefone - 0.36}{\MUprior}{\SIGMAprior})}{} ;
+          \addplot[black, mark=*] coordinates {(\MUbelieftwo - 0.51,\getY{\MUbelieftwo - 0.51}{\MUprior}{\SIGMAprior})}{} ;
+          % Text and lines
+          \node[font={\fontsize{10pt}{12 pt}\selectfont}] at (axis cs: -0.85,0.6) {$P(y_{t+1}; \pi^{(0)})$};
+          \node[font={\fontsize{10pt}{12 pt}\selectfont}, color=red!60!black] at (axis cs: \MUbeliefone - 0.15, 2.2) {$P(y_{t+1}; \pi_A^{(t)})$};
+          \node[font={\fontsize{10pt}{12 pt}\selectfont}, color=red!60!black] at (axis cs: \MUbelieftwo + 0.15, 2.2) {$P(y_{t+1}; \pi_B^{(t)})$};
+        \end{axis}
+    \end{tikzpicture}
+    \vspace{10pt}
+    \\
+    \begin{tabular}{ll}
+    \textbf{B} \hspace{25mm} \nassartwelve & \hspace{32mm} \pftwenty\\
+    \hspace{4pt}
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/experiment_second_20subj_500steps/exp_second_GNassarNatNsigma0.5_pc0.1_steps500_Dp0.0125.csv}\data
+        \begin{axis}[
+            width = .32\textwidth,
+            xmax = 0.36,
+            grid = both,
+            ylabel = $\Bar{\textbf{S}}$,
+            xlabel = $p$]
+            \plotwithquantiles{GNassarNatN_Sgm}{\data}
+            \plotwithquantiles{GNassarNatN_Ssh}{\data}
+        \end{axis}
+    \end{tikzpicture}
+               &
+    \hspace{10pt}
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/experiment_second_20subj_500steps/exp_second_GParticleFiltersigma0.5_pc0.1_steps500_Dp0.0125.csv}\data
+        \begin{axis}[
+            width = .32\textwidth,
+            xmax = 0.36,
+            grid = both,
+            ylabel = $\Bar{\textbf{S}}$,
+            xlabel = $p$,
+            legend to name = experimentsecondfigurelegend,
+            legend entries = {,,,$\Bar{\textbf{S}}_{\mathrm{BF}}$,,,,$\Bar{\textbf{S}}_{\mathrm{Sh}}$},
+            legend columns = 1]
+            \plotwithquantiles{GParticleFilter_Sgm}{\data}
+            \plotwithquantiles{GParticleFilter_Ssh}{\data}
+        \end{axis}
+    \end{tikzpicture}
+    \\
+    & \multicolumn{1}{r}{\ref{experimentsecondfigurelegend}}
+\end{tabular}
+\end{tabular}
+
+\end{minipage}
+\end{document}

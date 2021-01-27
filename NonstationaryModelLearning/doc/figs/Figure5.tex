@@ -1,0 +1,193 @@
+\documentclass{standalone}
+\input{../tikzsetup.tex}
+\usetikzlibrary{calc}
+\usepackage{adjustbox}
+
+\begin{document}
+
+\begin{minipage}{20cm}
+\begin{tabular}{lll}
+    \textbf{A} & \textbf{B} \hspace{15mm} $s = 0.14, p_c = 0.01$ &  \hspace{18mm} $s = 5.0, p_c = 0.005$\\
+    \begin{tikzpicture}
+      \vspace{3pt}
+        \begin{axis}[
+            name=axtask,
+            width = .32\textwidth,
+            xmin = 550, xmax = 900,
+            xlabel = time,
+            ymax = 5.5,
+            ymin = .5,
+            ylabel = category,
+            ytick = {1, 2, 3, 4, 5},
+            ]
+            \addplot[only marks, mark size = .2pt] table [x = x, y = states] {../data_final/taskexamples/task_multi_s1.0_Pc0.01.csv};
+            \addplot[ycomb, red, no marks, thick] table [x = x, y expr = \thisrow{switches} * 6] {../data_final/taskexamples/task_multi_s1.0_Pc0.01.csv};
+            \coordinate (axtask_pone) at (axis cs:590,0.5);
+            \coordinate (axtask_ptwo) at (axis cs:870,0.5);
+        \end{axis}
+    % ------ Axis for 1st distribution
+    \begin{axis}[
+        name=axtaskdistr1,
+        width = .25\textwidth,
+        xmin = 0,
+        ymin = 0,
+        ymax = 0.9,
+        ylabel = $P_{Y}(y_t | \mathbf{p}_t)$,
+        xlabel = category,
+        axis lines=middle,
+        every axis x label/.style={at={(current axis.right of origin)},below=2mm},
+        enlargelimits=0.15,
+        ybar,
+        bar width=10pt,
+        at={($(axtask.south west)+(-0.6cm,-5.5cm)$)}
+        ]
+        \addplot[blue!80!black, fill=blue!80!black] coordinates {
+            (1,0.648) (2,0.004) (3,0.133) (4,0.2) (5,0.015)
+        };
+        \coordinate (axtaskdistr1_pone) at (axis cs:1,1.05);
+      \end{axis}
+      % ------ Axis for 2nd distribution
+      \begin{axis}[
+          name=axtaskdistr2,
+          width = .25\textwidth,
+          xmin = 0,
+          ymin = 0,
+          ymax = 0.9,
+          ylabel = $P_{Y}(y_t | \mathbf{p}_t)$,
+          xlabel = category,
+          axis lines=middle,
+          every axis x label/.style={at={(current axis.right of origin)},below=2mm},
+          enlargelimits=0.15,
+          ybar,
+          bar width=10pt,
+          at={($(axtask.south west)+(1.4cm,-4cm)$)}
+          ]
+          \addplot[blue!80!black, fill=blue!80!black] coordinates {
+              (1,0.08) (2,0.06) (3,0.06) (4,0.22) (5,0.58)
+          };
+          \coordinate (axtaskdistr2_ptwo) at (axis cs:4,1.05);
+        \end{axis}
+        \draw [dashed] (axtask_pone) -- (axtaskdistr1_pone);
+        \draw [dashed] (axtask_ptwo) -- (axtaskdistr2_ptwo);
+    \end{tikzpicture}
+               &
+               \hspace{-14pt}
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/afterswitch/multi_s0.14_Pc0.01.csv}\data
+        % --------- Axis for main plot
+        \begin{axis}[
+            name = ax1,
+            width = .32\textwidth,
+            ymode = log,
+            grid = both,
+            ylabel = average error,
+            xlabel = steps after change]
+            \plotwithquantiles{pf1}{\data}
+            \plotwithquantiles{tsor1}{\data}
+            \plotwithquantiles{tsorOriginal1}{\data}
+            \plotwithquantiles{smileextended}{\data}
+            \plotwithquantiles{leaky}{\data}
+            \plotwithquantiles{pf20}{\data}
+            \plotwithquantiles{tsor20}{\data}
+            \plotwithquantiles{tsorOriginal20}{\data}
+            \plotwithquantiles{smileOriginal}{\data}
+            \plotwithquantiles{bayesfilter}{\data}
+            \coordinate (bottomleft_ax1) at (axis cs:0.,0.08);
+            \coordinate (topleft_ax1) at (axis cs:0.,0.8);
+            \coordinate (topright_ax1) at (axis cs:20.,0.8);
+            \coordinate (bottomright_ax1) at (axis cs:20.,0.08);
+            % draw a rectangle
+            \draw (bottomleft_ax1) rectangle (topright_ax1);
+        \end{axis}
+        % --------- Axis for zooming
+        \begin{axis}[
+              name=ax2,
+              width = .32\textwidth,
+              xmin=0.,xmax=20.,
+              ymin=0.08,ymax=0.8,
+              ymode = log,
+              grid = both,
+              xlabel=steps after change,
+              ylabel=average error,
+              at={($(ax1.south west)+(0cm,-5cm)$)}
+              ]
+              \plotwithquantiles{pf1}{\data}
+              \plotwithquantiles{tsor1}{\data}
+              \plotwithquantiles{tsorOriginal1}{\data}
+              \plotwithquantiles{smileextended}{\data}
+              \plotwithquantiles{leaky}{\data}
+              \plotwithquantiles{pf20}{\data}
+              \plotwithquantiles{tsor20}{\data}
+              \plotwithquantiles{tsorOriginal20}{\data}
+              \plotwithquantiles{smileOriginal}{\data}
+              \plotwithquantiles{bayesfilter}{\data}
+        \end{axis}
+        \draw [dashed] (bottomleft_ax1) -- (ax2.north west);
+        \draw [dashed] (bottomright_ax1) -- (ax2.north east);
+    \end{tikzpicture}
+        &
+        \hspace{-14pt}
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/afterswitch/multi_s5.0_Pc0.005.csv}\data
+        % --------- Axis for main plot
+        \begin{axis}[
+            name = ax3,
+            width = .32\textwidth,
+            ymode = log,
+            grid = both,
+            ylabel = average error,
+            xlabel = steps after change,
+            legend to name = multilegend,
+            legend columns = 5,
+            legend entries =
+            {,,,\pfone,,,,\mpone,,,,\mporiginalone,,,,\vsmile,,,,\leaky,,,,\pftwenty,,,,\mptwenty,,,,\mporiginaltwenty,,,,\smileoriginal,,,,\mpbayes},
+            ]
+            \plotwithquantiles{pf1}{\data}
+            \plotwithquantiles{tsor1}{\data}
+            \plotwithquantiles{tsorOriginal1}{\data}
+            \plotwithquantiles{smileextended}{\data}
+            \plotwithquantiles{leaky}{\data}
+            \plotwithquantiles{pf20}{\data}
+            \plotwithquantiles{tsor20}{\data}
+            \plotwithquantiles{tsorOriginal20}{\data}
+            \plotwithquantiles{smileOriginal}{\data}
+            \plotwithquantiles{bayesfilter}{\data}
+            \coordinate (bottomleft_ax3) at (axis cs:0.,0.015);
+            \coordinate (topleft_ax3) at (axis cs:0.,0.06);
+            \coordinate (topright_ax3) at (axis cs:30,0.06);
+            \coordinate (bottomright_ax3) at (axis cs:30,0.015);
+            % draw a rectangle
+            \draw (bottomleft_ax3) rectangle (topright_ax3);
+        \end{axis}
+        % --------- Axis for zooming
+        \begin{axis}[
+              name=ax4,
+              width = .32\textwidth,
+              xmin=0.,xmax=30.,
+              ymin=0.015,ymax=0.06,
+              ymode = log,
+              grid = both,
+              xlabel=steps after change,
+              ylabel=average error,
+              at={($(ax3.south west)+(0cm,-5cm)$)}
+              ]
+              \plotwithquantiles{pf1}{\data}
+              \plotwithquantiles{tsor1}{\data}
+              \plotwithquantiles{tsorOriginal1}{\data}
+              \plotwithquantiles{smileextended}{\data}
+              \plotwithquantiles{leaky}{\data}
+              \plotwithquantiles{pf20}{\data}
+              \plotwithquantiles{tsor20}{\data}
+              \plotwithquantiles{tsorOriginal20}{\data}
+              \plotwithquantiles{smileOriginal}{\data}
+              \plotwithquantiles{bayesfilter}{\data}
+        \end{axis}
+        \draw [dashed] (bottomleft_ax3) -- (ax4.north west);
+        \draw [dashed] (bottomright_ax3) -- (ax4.north east);
+    \end{tikzpicture}
+    \\
+        & \multicolumn{2}{c}{\ref{multilegend}}
+\end{tabular}
+
+\end{minipage}
+\end{document}

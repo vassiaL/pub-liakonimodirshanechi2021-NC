@@ -1,0 +1,27 @@
+\documentclass{standalone}
+\input{../tikzsetup.tex}
+\usepackage{multirow}
+
+\begin{document}
+
+\begin{minipage}{17cm}
+\setlength{\tabcolsep}{1pt}
+\def\rows{6} % This refers to the heatmap plots
+\def\cols{5} % This refers to the heatmap plots
+\def\zmax{0} % This refers to the heatmap plots
+\def\ymin{-1} % This refers to the heatmap plots
+\begin{tabular}{llll} % 4 columns
+    \hspace{10mm} \nassarten & \nassartenoriginal & \nassartwelve & \nassartwelveoriginal \\
+    \begin{tikzpicture}
+                \heatmap{../data_final/heatmaps/gaussian_heatmap_diff_gnassarJN.csv}{axis lines = box, yticklabels = {0.1,1.0,5.0}, ytick = {-1,0,.699}, colorbar style = {yticklabel={$10^{\pgfmathprintnumber{\tick}}$}}, xlabel = $p_c$, ylabel = $\sigma$}
+             \end{tikzpicture} \hspace{0.01pt} &
+    \trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_gnassarJNOriginal.csv}{}} &
+    \trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_gnassarNatN.csv}{}} &
+    \hspace{-3.5mm}
+    \begin{tikzpicture}
+                \heatmap{../data_final/heatmaps/gaussian_heatmap_diff_gnassarNatNOriginal.csv}{colorbar, axis lines = box, ytick = {-1,0,.699}, colorbar style = {yticklabel={$10^{\pgfmathprintnumber{\tick}}$}}, xlabel = $p_c$}
+             \end{tikzpicture} \\
+\end{tabular}
+\end{minipage}
+
+\end{document}

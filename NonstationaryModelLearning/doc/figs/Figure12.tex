@@ -1,0 +1,50 @@
+\documentclass{standalone}
+\input{../tikzsetup.tex}
+\usepackage{multirow}
+
+\begin{document}
+
+\begin{minipage}{13cm}
+\begin{tabular}{ll}
+    \hspace{21mm} $\sigma = 0.1, p_c = 0.1$ &  \hspace{21mm} $\sigma = 5.0, p_c = 0.01$\\
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/afterswitch/gaussian_s0.1_Pc0.1.csv}\data
+        \pgfplotstableread{../data_final/afterswitch/gaussian_s0.1_Pc0.1_gnassarOriginal.csv}\dataOriginal
+        \begin{axis}[
+            width = .43\textwidth,
+            ymode = log,
+            grid = both,
+            ylabel = average error,
+            xlabel = steps after change]
+            \plotwithquantiles{gnassarJN}{\data}
+            \plotwithquantiles{gnassarNatN}{\data}
+            \plotwithquantiles{gnassarJNOriginal}{\dataOriginal}
+            \plotwithquantiles{gnassarNatNOriginal}{\dataOriginal}
+        \end{axis}
+    \end{tikzpicture}
+        &
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/afterswitch/gaussian_s5.0_Pc0.01.csv}\data
+        \pgfplotstableread{../data_final/afterswitch/gaussian_s5.0_Pc0.01_gnassarOriginal.csv}\dataOriginal
+        \begin{axis}[
+            width = .43\textwidth,
+            ymode = log,
+            ylabel = average error,
+            xlabel = steps after change,
+            legend to name = gausslegendoriginal,
+            grid = both,
+            legend entries = {,,,\nassarten,,,,\nassartwelve,,,,\nassartenoriginal,,,,\nassartwelveoriginal},
+            legend columns = 4,
+            ]
+            \plotwithquantiles{gnassarJN}{\data}
+            \plotwithquantiles{gnassarNatN}{\data}
+            \plotwithquantiles{gnassarJNOriginal}{\dataOriginal}
+            \plotwithquantiles{gnassarNatNOriginal}{\dataOriginal}
+        \end{axis}
+    \end{tikzpicture}
+    \\
+     \multicolumn{2}{c}{\ref{gausslegendoriginal}}
+\end{tabular}
+
+\end{minipage}
+\end{document}

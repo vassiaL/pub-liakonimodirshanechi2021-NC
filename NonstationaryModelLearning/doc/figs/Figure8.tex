@@ -1,0 +1,133 @@
+\documentclass{standalone}
+\input{../tikzsetup.tex}
+
+\begin{document}
+
+
+\begin{minipage}{17cm}
+\centering
+\begin{tabular}{ll}
+    \textbf{A} \hspace{14mm} $\sigma = 0.1, p_c' = 0.04$ & \textbf{B} \hspace{14mm} $\sigma = 0.1, p_c' = 0.004$\\
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/robustness/gaussian_robustnessfrombayes_s0.1_Pc0.0412.csv}\data
+        \begin{axis}[
+            width = .32\textwidth,
+            ymode = log,
+             xmode = log,
+            ymax = .1,
+            grid = both,
+            ymin = 0.000003,
+            ylabel = mean regret,
+            xlabel = actual $p_c$]
+            \addplot[pf1] table [x = x, y = GParticleFilter1] {\data};
+            \addplot[gsor1] table [x = x, y = GSOR1] {\data};
+            \addplot[gsorOriginal1] table [x = x, y = GSOROriginal1] {\data};
+            \addplot[smileextended] table [x = x, y = GSmileextended] {\data};
+            \addplot[gnassarJN] table [x = x, y = GNassarJN] {\data};
+            \addplot[leaky] table [x = x, y = GLeakyIntegrator] {\data};
+            \addplot[pf20] table [x = x, y = GParticleFilter20] {\data};
+            \addplot[gsor20] table [x = x, y = GSOR20] {\data};
+            \addplot[gsorOriginal20] table [x = x, y = GSOROriginal20] {\data};
+            \addplot[smileOriginal] table [x = x, y = GSmileOriginal] {\data};
+            \addplot[gnassarNatN] table [x = x, y = GNassarNatN] {\data};
+            \addplot[bayesfilter] table [x = x, y = GBayesFilter] {\data};
+            \coordinate (actualpc) at (0.0412, 0.000003) {};
+        \end{axis}
+        \node[actualpcstyle] at (actualpc) {};
+    \end{tikzpicture}
+               &
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/robustness/gaussian_robustnessfrombayes_s0.1_Pc0.0041.csv}\data
+        \begin{axis}[
+            width = .32\textwidth,
+            ymode = log,
+             xmode = log,
+            ymax = .1,
+            ymin = 2.5e-7,
+            grid = both,
+            ylabel = mean regret,
+            xlabel = actual $p_c$]
+            \addplot[pf1] table [x = x, y = GParticleFilter1] {\data};
+            \addplot[gsor1] table [x = x, y = GSOR1] {\data};
+            \addplot[gsorOriginal1] table [x = x, y = GSOROriginal1] {\data};
+            \addplot[smileextended] table [x = x, y = GSmileextended] {\data};
+            \addplot[gnassarJN] table [x = x, y = GNassarJN] {\data};
+            \addplot[leaky] table [x = x, y = GLeakyIntegrator] {\data};
+            \addplot[pf20] table [x = x, y = GParticleFilter20] {\data};
+            \addplot[gsor20] table [x = x, y = GSOR20] {\data};
+            \addplot[gsorOriginal20] table [x = x, y = GSOROriginal20] {\data};
+            \addplot[smileOriginal] table [x = x, y = GSmileOriginal] {\data};
+            \addplot[gnassarNatN] table [x = x, y = GNassarNatN] {\data};
+            \addplot[bayesfilter] table [x = x, y = GBayesFilter] {\data};
+            \coordinate (actualpc) at (.00412, 2.5e-7) {};
+        \end{axis}
+        \node[actualpcstyle] at (actualpc) {};
+    \end{tikzpicture} \\
+    \textbf{C} \hspace{14mm} $\sigma = 5, p_c' = 0.04$ & \textbf{D} \hspace{14mm} $\sigma = 5, p_c' = 0.004$\\
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/robustness/gaussian_robustnessfrombayes_s5_Pc0.0412.csv}\data
+        \begin{axis}[
+            width = .32\textwidth,
+            ymode = log,
+            xmode = log,
+            ymax = 1.,
+            ymin = 1.2e-3,
+            grid = both,
+            ylabel = mean regret,
+            xlabel = actual $p_c$]
+            \addplot[pf1] table [x = x, y = GParticleFilter1] {\data};
+            \addplot[gsor1] table [x = x, y = GSOR1] {\data};
+            \addplot[gsorOriginal1] table [x = x, y = GSOROriginal1] {\data};
+            \addplot[smileextended] table [x = x, y = GSmileextended] {\data};
+            \addplot[gnassarJN] table [x = x, y = GNassarJN] {\data};
+            \addplot[leaky] table [x = x, y = GLeakyIntegrator] {\data};
+            \addplot[pf20] table [x = x, y = GParticleFilter20] {\data};
+            \addplot[gsor20] table [x = x, y = GSOR20] {\data};
+            \addplot[gsorOriginal20] table [x = x, y = GSOROriginal20] {\data};
+            \addplot[smileOriginal] table [x = x, y = GSmileOriginal] {\data};
+            \addplot[gnassarNatN] table [x = x, y = GNassarNatN] {\data};
+            \addplot[bayesfilter] table [x = x, y = GBayesFilter] {\data};
+            \node (actualpc) at (.0412, 1.2e-3) {};
+        \end{axis}
+        \node[actualpcstyle] at (actualpc) {};
+    \end{tikzpicture}
+               &
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/robustness/gaussian_robustnessfrombayes_s5_Pc0.0041.csv}\data
+        \begin{axis}[
+            width = .32\textwidth,
+            ymode = log,
+             xmode = log,
+            ymax = 1.,
+            legend columns = 4,
+            ymin = 1.25e-3,
+            legend to name = robustnessgaussianlegend,
+            legend entries =
+            {\pfone,\mpone,\mporiginalone,\vsmile,\nassarten,\leaky,\pftwenty,\mptwenty,\mporiginaltwenty,\smileoriginal,\nassartwelve,\mpbayes},
+            legend columns = 6,
+            grid = both,
+            ylabel = mean regret,
+            xlabel = actual $p_c$]
+            \addplot[pf1] table [x = x, y = GParticleFilter1] {\data};
+            \addplot[gsor1] table [x = x, y = GSOR1] {\data};
+            \addplot[gsorOriginal1] table [x = x, y = GSOROriginal1] {\data};
+            \addplot[smileextended] table [x = x, y = GSmileextended] {\data};
+            \addplot[gnassarJN] table [x = x, y = GNassarJN] {\data};
+            \addplot[leaky] table [x = x, y = GLeakyIntegrator] {\data};
+            \addplot[pf20] table [x = x, y = GParticleFilter20] {\data};
+            \addplot[gsor20] table [x = x, y = GSOR20] {\data};
+            \addplot[gsorOriginal20] table [x = x, y = GSOROriginal20] {\data};
+            \addplot[smileOriginal] table [x = x, y = GSmileOriginal] {\data};
+            \addplot[gnassarNatN] table [x = x, y = GNassarNatN] {\data};
+            \addplot[bayesfilter] table [x = x, y = GBayesFilter] {\data};
+            \node (actualpc) at (.00412, 1.25e-3) {};
+        \end{axis}
+        \node[actualpcstyle] at (actualpc) {};
+    \end{tikzpicture}
+    \\
+    \multicolumn{2}{c}{\ref{robustnessgaussianlegend}}
+
+\end{tabular}
+
+\end{minipage}
+\end{document}

@@ -1,0 +1,71 @@
+\documentclass{standalone}
+\input{../tikzsetup.tex}
+
+\usepgfplotslibrary{statistics}
+\newcommand{\approxs}[1]{\hat{#1}}
+
+\pgfplotstableset{
+    create on use/x1/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x1}
+    },
+    create on use/x2/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x2}
+    },
+    create on use/x3/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x3}
+    },
+    create on use/x4/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x4}
+    },
+    create on use/x5/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x5}
+    },
+    create on use/x6/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x6}
+    },
+    create on use/x7/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x7}
+    },
+    create on use/x8/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x8}
+    },
+    create on use/x9/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x9}
+    },
+    create on use/x10/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x10}
+    },
+    create on use/x11/.style={
+        create col/copy column from table={../data_final/jitter_gauss.csv}{x11}
+    }
+}
+
+
+\begin{document}
+
+\begin{tikzpicture}
+\begin{axis}[
+  mark size = 1pt,
+  width = 0.9\textwidth,
+  ymajorgrids,
+  xtick={0.5, 2., 3.5, 5., 6.5, 8., 9.5, 11., 12.5, 14., 15.5},
+  xticklabels={\pfone, \pftwenty, \mpone, \mptwenty, \mporiginalone, \mporiginaltwenty, \vsmile,  \smileoriginal, \nassarten, \nassartwelve, \leaky},
+  xticklabel style={rotate={60}, anchor={east}},
+  ylabel = {$\Delta \textbf{MSE} [ \approxs{\Theta}_t ]$},
+  title = {$\Delta \textbf{MSE} [ \approxs{\Theta}_t ]$ across all $\sigma$ and $p_c$ levels},
+  ]
+\addplot[only marks, pf1, error bars/.cd, y dir=both, y explicit] table [x=x1, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_pf1.csv};
+\addplot[only marks, pf20, error bars/.cd, y dir=both, y explicit] table [x=x2, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_pf20.csv};
+\addplot[only marks, gsor1, error bars/.cd, y dir=both, y explicit] table [x=x3, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_gsor1.csv};
+\addplot[only marks, gsor20, error bars/.cd, y dir=both, y explicit] table [x=x4, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_gsor20.csv};
+\addplot[only marks, gsorOriginal1, error bars/.cd, y dir=both, y explicit] table [x=x5, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_gsorOriginal1.csv};
+\addplot[only marks, gsorOriginal20, error bars/.cd, y dir=both, y explicit] table [x=x6, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_gsorOriginal20.csv};
+\addplot[only marks, smileextended, error bars/.cd, y dir=both, y explicit] table [x=x7, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_smileextended.csv};
+\addplot[only marks, smileOriginal, error bars/.cd, y dir=both, y explicit] table [x=x8, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_smileOriginal.csv};
+\addplot[only marks, gnassarJN, error bars/.cd, y dir=both, y explicit] table [x=x9, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_gnassarJN.csv};
+\addplot[only marks, gnassarNatN, error bars/.cd, y dir=both, y explicit] table [x=x10, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_gnassarNatN.csv};
+\addplot[only marks, leaky, error bars/.cd, y dir=both, y explicit] table [x=x11, y expr = \thisrowno{2}, y error expr = \thisrowno{4}] {../data_final/heatmaps_std_NONINDEPENDENT_final/gaussian_heatmap_diff_std_leaky.csv};
+\end{axis}
+\end{tikzpicture}
+
+\end{document}

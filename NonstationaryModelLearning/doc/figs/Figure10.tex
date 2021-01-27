@@ -1,0 +1,126 @@
+\documentclass{standalone}
+\input{../tikzsetup.tex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{calc}
+
+\newcommand\xreference{0.4}
+
+\newcommand\xstart{-2*\xreference - 0.5}
+\newcommand\xstop{8*\xreference - 0.5}
+
+\newcommand{\approxs}[1]{\hat{#1}}
+\newcommand\MUprior{0.}
+\newcommand\SIGMAprior{0.8}
+\newcommand\MUbeliefone{0.9}
+\newcommand\SIGMAbeliefone{0.2}
+
+\newcommand{\getY}[3]{exp(-(#1-#2)^2 / (2 * #3^2)) / (#3 * sqrt(2*pi))}
+
+\newcommand\MUbelieftwo{2.1}
+\newcommand\SIGMAbelieftwo{0.2}
+
+\begin{document}
+
+\begin{minipage}{19cm}
+\centering
+\begin{tabular}{l}
+  \textbf{A} \\
+    \hspace{30mm}
+    \begin{tikzpicture}
+      \begin{axis}[
+          name=axtaskdistr1,
+          ytick=\empty,
+          xtick=\empty,
+          width = .4\textwidth,
+          ymin = 0, ymax = 2.3,
+          xlabel = $y_{t+1}$,
+          axis lines=middle,
+          clip=false,
+          ]
+          % density of Normal distribution:
+          \addplot[black, thick, domain=\xstart:\xstop, samples=201]
+                      {exp(-(x-\MUprior)^2 / (2 *\SIGMAprior^2))
+                      / (\SIGMAprior * sqrt(2*pi))};
+          \addplot[red!60!black, thick, domain=\xstart:\xstop, samples=201]
+                      {exp(-(x-\MUbeliefone)^2 / (2 *\SIGMAbeliefone^2))
+                      / (\SIGMAbeliefone * sqrt(2*pi))};
+          % Dashed vertical lines
+          \addplot[black, dashed] coordinates {(\MUbeliefone - 0.25, 0.) (\MUbeliefone - 0.25, \getY{\MUbeliefone - 0.25}{\MUbeliefone}{\SIGMAbeliefone})};
+          \addplot[black, dashed] coordinates {(\MUbeliefone + 0.25, 0.) (\MUbeliefone + 0.25, \getY{\MUbeliefone + 0.25}{\MUbeliefone}{\SIGMAbeliefone})};
+          % Mark points
+          \addplot[red!60!black, mark=*] coordinates {(\MUbeliefone - 0.25,\getY{\MUbeliefone - 0.25}{\MUbeliefone}{\SIGMAbeliefone})}{} ;
+          \addplot[red!60!black, mark=*] coordinates {(\MUbeliefone + 0.25,\getY{\MUbeliefone + 0.25}{\MUbeliefone}{\SIGMAbeliefone})}{} ;
+          \addplot[black, mark=*] coordinates {(\MUbeliefone - 0.25,\getY{\MUbeliefone - 0.25}{\MUprior}{\SIGMAprior})}{} ;
+          \addplot[black, mark=*] coordinates {(\MUbeliefone + 0.25,\getY{\MUbeliefone + 0.25}{\MUprior}{\SIGMAprior})}{} ;
+          % Text and lines
+          \node[font={\fontsize{10pt}{12 pt}\selectfont}] at (axis cs: -0.85,0.6) {$P(y_{t+1}; \pi^{(0)})$};
+          \node[font={\fontsize{10pt}{12 pt}\selectfont}, color=red!60!black] at (axis cs: 2.,0.62) {$P(y_{t+1}; \pi^{(t)})$};
+          \node[font={\fontsize{10pt}{12 pt}\selectfont}] at (axis cs: \MUbeliefone - 0.25 - 0.2,-0.25) {$s = -1$};
+          \node[font={\fontsize{10pt}{12 pt}\selectfont}] at (axis cs: \MUbeliefone + 0.25 + 0.4,-0.25) {$s = +1$};
+          \draw[->, >=latex, line width=0.1] (\MUbeliefone - 0.25 - 0.3, -0.15) -- (\MUbeliefone - 0.25, -0.05);
+          \draw[->, >=latex, line width=0.1] (\MUbeliefone + 0.25 + 0.3, -0.15) -- (\MUbeliefone + 0.25, -0.05);
+        \end{axis}
+    \end{tikzpicture}
+    \\
+    \begin{tabular}{ll}
+    \textbf{B} \hspace{25mm} \nassartwelve & \hspace{32mm} \pftwenty\\
+    \hspace{10pt}
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/experiment_20subj_500steps/exp_GNassarNatNsigma0.5_pc0.1_steps500_y_hat_center1.0_var_center0.5_Dy0.25_Dvar1.0_Dd0.1.csv}\data
+        \begin{axis}[
+            width = .29\textwidth,
+            grid = both,
+            ylabel = $\Bar{\textbf{S}}_{\mathrm{BF}}$,
+            xlabel = $\delta$]
+            \plotwithquantiles{GNassarNatN_Sgmpositive}{\data}
+            \plotwithquantiles{GNassarNatN_Sgmnegative}{\data}
+        \end{axis}
+    \end{tikzpicture}
+               &
+    \hspace{17pt}
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/experiment_20subj_500steps/exp_GParticleFiltersigma0.5_pc0.1_steps500_y_hat_center1.0_var_center0.5_Dy0.25_Dvar1.0_Dd0.1.csv}\data
+        \begin{axis}[
+            width = .29\textwidth,
+            grid = both,
+            ylabel = $\Bar{\textbf{S}}_{\mathrm{BF}}$,
+            xlabel = $\delta$]
+            \plotwithquantiles{GParticleFilter_Sgmpositive}{\data}
+            \plotwithquantiles{GParticleFilter_Sgmnegative}{\data}
+        \end{axis}
+    \end{tikzpicture} \\
+    \hspace{4pt}
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/experiment_20subj_500steps/exp_GNassarNatNsigma0.5_pc0.1_steps500_y_hat_center1.0_var_center0.5_Dy0.25_Dvar1.0_Dd0.1.csv}\data
+        \begin{axis}[
+            width = .29\textwidth,
+            grid = both,
+            ylabel = $\Bar{\textbf{S}}_{\mathrm{Sh}}$,
+            xlabel = $\delta$]
+            \plotwithquantiles{GNassarNatN_Sshpositive}{\data}
+            \plotwithquantiles{GNassarNatN_Sshnegative}{\data}
+        \end{axis}
+    \end{tikzpicture}
+               &
+    \hspace{10pt}
+    \begin{tikzpicture}
+        \pgfplotstableread{../data_final/experiment_20subj_500steps/exp_GParticleFiltersigma0.5_pc0.1_steps500_y_hat_center1.0_var_center0.5_Dy0.25_Dvar1.0_Dd0.1.csv}\data
+        \begin{axis}[
+            width = .29\textwidth,
+            grid = both,
+            ylabel = $\Bar{\textbf{S}}_{\mathrm{Sh}}$,
+            xlabel = $\delta$,
+            legend to name = experimentfigurelegend,
+            legend entries = {,,,s=+1,,,,s=-1},
+            legend columns = 1]
+            \plotwithquantiles{GParticleFilter_Sshpositive}{\data}
+            \plotwithquantiles{GParticleFilter_Sshnegative}{\data}
+        \end{axis}
+    \end{tikzpicture}
+    \\
+    & \multicolumn{1}{r}{\ref{experimentfigurelegend}}
+\end{tabular}
+\end{tabular}
+
+\end{minipage}
+\end{document}

@@ -1,0 +1,37 @@
+\documentclass{standalone}
+\input{../tikzsetup.tex}
+\usepackage{multirow}
+
+\begin{document}
+
+\begin{minipage}{17cm}
+\setlength{\tabcolsep}{1pt}
+\def\rows{6} % This refers to the heatmap plots
+\def\cols{5} % This refers to the heatmap plots
+\def\zmax{0} % This refers to the heatmap plots
+\def\ymin{-1} % This refers to the heatmap plots
+\begin{tabular}{lllll} % 5 columns
+    \textbf{A}\hspace{7mm} \mpbayes & \textbf{B} & \pfone & \mpone & \mporiginalone \\
+            \begin{tikzpicture}
+                        \heatmap{../data_final/heatmaps/gaussian_heatmap_bayesfilter.csv}{colorbar, axis lines = box, yticklabels = {0.1,1.0,5.0}, ytick = {-1,0,.699}, colorbar style = {yticklabel={$10^{\pgfmathprintnumber{\tick}}$}}, xlabel = $p_c$, ylabel = $\sigma$}
+                     \end{tikzpicture} & &
+    \trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_pf1.csv}{}} &
+    \trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_gsor1.csv}{}} &
+    \trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_gsorOriginal1.csv}{}} \\
+    \textbf{C}\hspace{7mm}\vsmile & \textbf{D} & \pftwenty & \mptwenty & \mporiginaltwenty \\
+    %
+    \hspace{9mm}\trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_smileextended.csv}{}} & &
+    \trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_pf20.csv}{}} &
+    \trimboth{\heatmapblack{../data_final/heatmaps/gaussian_heatmap_diff_gsor20.csv}{}} &
+    \trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_gsorOriginal20.csv}{}} \\
+    \textbf{E}\hspace{7mm}\smileoriginal  & \textbf{F} & \leaky & \nassarten & \nassartwelve \\
+    %
+     \hspace{9mm}\trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_smileOriginal.csv}{}} & &
+     \trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_leaky.csv}{}} &
+    \trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_gnassarJN.csv}{}} &
+    \trimboth{\heatmap{../data_final/heatmaps/gaussian_heatmap_diff_gnassarNatN.csv}{}} \\
+    \hspace{20mm}
+\end{tabular}
+\end{minipage}
+
+\end{document}

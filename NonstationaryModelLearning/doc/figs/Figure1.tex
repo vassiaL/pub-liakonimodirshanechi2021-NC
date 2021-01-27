@@ -1,0 +1,109 @@
+\documentclass{standalone}
+\input{../tikzsetup.tex}
+\usepackage{multirow}
+\usetikzlibrary{calc}
+\usepackage{adjustbox}
+
+\usepackage{amsmath}
+\newcommand\xstartingrec{-1}
+\newcommand\ystartingrec{-3}
+\newcommand\sizerec{1}
+
+\newcommand\stepgrid{1.25}
+\newcommand\startlowleft{0.75}
+\newcommand\stoplowright{4.25}
+\newcommand\stophighright{5.25}
+
+\usetikzlibrary{snakes}
+
+\begin{document}
+
+\begin{minipage}{11cm}
+\begin{tabular}{ll}
+  \textbf{A} \\
+  \hspace{0.5cm}
+    \begin{tikzpicture}
+        [
+        every node/.style = {circle, minimum width = 2.5em, draw, inner sep = 1},
+        node distance = 1.3cm, font = {\small}, thick]
+        \node (h) at (0, 0) {$C_t$};
+        \node (thetat) [below of=h] {$\Theta_t$};
+        \node (thetatminus1) [left of=thetat] {$\Theta_{t-1}$};
+        \node (hminus1) [above of=thetatminus1] {$C_{t-1}$};
+        \node (x) [below of=thetat] {$Y_t$};
+        \node (xminus1) [below of=thetatminus1] {$Y_{t-1}$};
+        \node (dots) [draw=none, left of =thetatminus1] {...};
+        \node (theta1) [left of=dots] {$\Theta_{1}$};
+        \node (h1) [above of=theta1] {$C_{1}$};
+        \node (x1) [below of=theta1] {$Y_1$};
+        \draw[->] (h) -- (thetat);
+        \draw[->] (thetatminus1) -- (thetat);
+        \draw[->] (thetat) -- (x);
+        \draw[->] (thetatminus1) -- (xminus1);
+        \draw[->] (hminus1) -- (thetatminus1);
+        \draw[->] (h1) -- (theta1);
+        \draw[->] (theta1) -- (x1);
+        \draw[->] (theta1) -- (dots);
+        \draw[->] (dots) -- (thetatminus1);
+    \end{tikzpicture}
+    &
+    \hspace{0.2cm}
+    \parbox[b]{0.3\textwidth}{
+    \begin{minipage}{.3\textwidth}
+    \begin{equation*}
+    \begin{aligned}
+    & C_1 = 1 \\
+    & C_t \sim \text{Bernoulli}(p_c) \\
+    & \Theta_t| \{ C_t = 1 \} \sim \pi^{(0)}(.) \\
+    & \Theta_t| \{ C_t = 0 \} = \Theta_{t-1}\\
+    & Y_t| \{ \Theta_{t}=\theta \} \sim P_{Y}(. | \theta)\,
+    \end{aligned}
+  \end{equation*}
+    \end{minipage}
+    \vspace{10mm}}
+    \\
+    \textbf{B}\\
+     \hspace{1cm}
+       \begin{tikzpicture}
+         \draw[step=\stepgrid cm,color=gray] (\startlowleft,\startlowleft) grid (\stoplowright,\stophighright);
+         % --- Blue circle
+         \draw [blue,fill] (2*\stepgrid , \stophighright) circle [radius=0.2] node [black,above=0.3] {Coffee shop};
+         % --- Orange circle
+         \draw [orange,fill] (2*\stepgrid , \startlowleft) circle [radius=0.2] node [black,below=0.3] {Your friend's office};
+         % --- River
+         \draw[cyan, very thick, snake=coil,segment aspect=0] (\startlowleft,2*\stepgrid+0.4)   -- (\stoplowright,2*\stepgrid+0.4);
+         \draw[cyan, very thick, snake=coil,segment aspect=0] (\startlowleft,2*\stepgrid+0.6)   -- (\stoplowright,2*\stepgrid+0.6);
+         \draw[cyan, very thick, snake=coil,segment aspect=0] (\startlowleft,2*\stepgrid+0.8)   -- (\stoplowright,2*\stepgrid+0.8);
+         % --- Detour Bridge
+         \draw[brown, fill] (3*\stepgrid - 0.2, 2*\stepgrid) rectangle (3*\stepgrid + 0.2, 3*\stepgrid);
+         % --- Path
+         \draw[->, >=latex, thick] (2*\stepgrid, \startlowleft+0.2)  -- (2*\stepgrid, 2*\stepgrid);
+         \draw[->, >=latex, thick] (2*\stepgrid, 2*\stepgrid)  -- (3*\stepgrid, 2*\stepgrid);
+         \draw[->, >=latex, thick] (3*\stepgrid, 2*\stepgrid)  -- (3*\stepgrid, 3*\stepgrid);
+         \draw[->, >=latex, thick] (3*\stepgrid, 3*\stepgrid)  -- (2*\stepgrid, 3*\stepgrid);
+         \draw[->, >=latex, thick] (2*\stepgrid, 3*\stepgrid)  -- (2*\stepgrid, 4*\stepgrid);
+       \end{tikzpicture}
+    &
+    \hspace{-0.5cm}
+    \begin{tikzpicture}
+    \draw[step=\stepgrid cm,color=gray] (\startlowleft,\startlowleft) grid (\stoplowright,\stophighright);
+    % --- Blue circle
+    \draw [blue,fill] (2*\stepgrid , \stophighright) circle [radius=0.2] node [black,above=0.3] {Coffee shop};
+    % --- Orange circle
+    \draw [orange,fill] (2*\stepgrid , \startlowleft) circle [radius=0.2] node [black,below=0.3] {Your friend's office};
+    % --- River
+    \draw[cyan, very thick, snake=coil,segment aspect=0] (\startlowleft,2*\stepgrid+0.4)   -- (\stoplowright,2*\stepgrid+0.4);
+    \draw[cyan, very thick, snake=coil,segment aspect=0] (\startlowleft,2*\stepgrid+0.6)   -- (\stoplowright,2*\stepgrid+0.6);
+    \draw[cyan, very thick, snake=coil,segment aspect=0] (\startlowleft,2*\stepgrid+0.8)   -- (\stoplowright,2*\stepgrid+0.8);
+    % --- Bridge
+    \draw[brown, fill] (2*\stepgrid - 0.2, 2*\stepgrid) rectangle (2*\stepgrid + 0.2, 3*\stepgrid);
+    % --- Path
+    \draw[->, >=latex, thick] (2*\stepgrid, \startlowleft+0.2)  -- (2*\stepgrid, 2*\stepgrid);
+    \draw[->, >=latex, thick] (2*\stepgrid, 2*\stepgrid)  -- (2*\stepgrid, 3*\stepgrid);
+    \draw[->, >=latex, thick] (2*\stepgrid, 3*\stepgrid)  -- (2*\stepgrid, 4*\stepgrid);
+    % --- New Bridge
+    \draw[brown, fill] (3*\stepgrid - 0.2, 2*\stepgrid) rectangle (3*\stepgrid + 0.2, 3*\stepgrid);
+    \end{tikzpicture}
+  \end{tabular}
+  \end{minipage}
+\end{document}
