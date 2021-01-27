@@ -3,10 +3,10 @@ This is the (julia) code for the publication:
 V. Liakoni *, A. Modirshanechi *, J. Brea, and W. Gerstner
 [*Learning in Volatile Environments with the Bayes Factor Surprise*](https://www.mitpressjournals.org/doi/abs/10.1162/neco_a_01352), Neural Computation 33, 269–340 (2021)
 
-V.L. and A.M. made equal contribution to this article.
+\* V.L. and A.M. made equal contribution to this article.
 
 Contact:
-[vasiliki.liakoni@epfl.ch](mailto:vasiliki.liakoni@epfl.ch)
+[vasiliki.liakoni@epfl.ch](mailto:vasiliki.liakoni@epfl.ch), \
 [alireza.modirshanechi@epfl.ch](mailto:alireza.modirshanechi@epfl.ch)
 
 ## Installation
@@ -16,10 +16,10 @@ Dependencies:
 * Mac or Linux
 * [Julia](https://julialang.org) (1.2)
 
-Navigate into the NonstationaryModelLearning/src folder.
+Navigate into the NonstationaryModelLearning/src folder. \
 Open a julia terminal, press "]" to enter the package management mode and type
 
-(v1.2) pkg> activate ..
+(v1.2) pkg> activate .. \
 (NonstationaryModelLearning) pkg> instantiate
 
 All (julia) packages and dependencies will be installed automatically within this environment.
@@ -32,13 +32,13 @@ To run the main simulations of the paper, type.
 
 julia> NonstationaryModelLearning.runner_compare()
 
-Note that the simulations would take long, so the number of steps are different from the ones used in the paper.
-Uncomment first lines in runner_compare() in the run_comparisons.jl file to replicate the paper's simulations.
-Parameters of the environments and of the learning algorithms can also be changed in the run_comparisons.jl file.
+Note that the simulations would take long, so the settings are different from the ones used in the paper. \
+Uncomment the marked lines in the run_comparisons.jl file to replicate the paper's simulations. \
+Parameters of the environments and of the learning algorithms can also be changed in the same file.
 
 Otherwise, a good place to start with the learning algorithms and the environments is the examples.jl file.
 
-The naming convention of the algorithms are same as used in the paper.
+The naming convention of the algorithms are same as used in the paper. \
 The Categorical task (section 2.3.2) is called "Multinomial" in the code.
 
 ## Code
